@@ -30,16 +30,22 @@ const Login = () => {
     try {
       // Verificar credenciais do Vercel
       if (email === 'marcos.rherculano@gmail.com' && password === 'markinhos123') {
-        await login(email, password);
-        toast.success('Login realizado com sucesso!');
-        navigate('/admin');
-        return;
+        const result = await login(email, password);
+        if (!result.error) {
+          toast.success('Login realizado com sucesso!');
+          navigate('/admin', { replace: true });
+          return;
+        }
       }
 
       // Tentar login normal
-      await signIn(email.trim(), password);
-      toast.success('Login realizado com sucesso!');
-      navigate('/admin');
+      const result = await signIn(email.trim(), password);
+      if (!result.error) {
+        toast.success('Login realizado com sucesso!');
+        navigate('/admin', { replace: true });
+      } else {
+        toast.error('Email ou senha inválidos');
+      }
     } catch (error) {
       toast.error('Email ou senha inválidos');
     } finally {

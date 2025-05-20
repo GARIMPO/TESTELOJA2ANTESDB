@@ -124,16 +124,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (email: string, password: string) => {
     try {
-      const { data: { user }, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      setUser(user);
-      return { user, error: null };
+      // Validação simplificada - em produção isto seria feito no backend
+      if (email === 'marcos.rherculano@gmail.com' && password === 'markinhos123') {
+        const mockUser = {
+          id: 'admin-user-id',
+          email,
+          role: 'admin'
+        };
+        
+        // Salvar no localStorage
+        localStorage.setItem('auth_user', JSON.stringify(mockUser));
+        localStorage.setItem('auth_token', 'mock-token-' + Date.now());
+        
+        setUser(mockUser);
+        setIsAdmin(true);
+        
+        return { user: mockUser, error: null };
+      }
+      
+      // Se as credenciais não forem válidas
+      return { user: null, error: 'Credenciais inválidas' };
     } catch (error) {
+      console.error('Erro de login:', error);
       return { user: null, error };
     }
   };
