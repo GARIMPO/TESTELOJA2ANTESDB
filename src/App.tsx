@@ -38,7 +38,11 @@ const App = () => (
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/about-us" element={<AboutUsPage />} />
               <Route path="/admin" element={<AdminPage />} />
-              <Route path="/garimpo" element={<GarimpoOfertas />} />
+              <Route path="/garimpo" element={
+                <PrivateRoute>
+                  <GarimpoOfertas />
+                </PrivateRoute>
+              } />
               <Route path="/garimpo/:id" element={<GarimpoOfertaView />} />
               <Route path="/politica-de-privacidade" element={<PrivacyPolicyPage />} />
               <Route path="*" element={<NotFound />} />
