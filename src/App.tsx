@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
@@ -37,7 +37,12 @@ const App = () => (
               <Route path="/cart" element={<CartPage />} />
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/about-us" element={<AboutUsPage />} />
-              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={
+                <PrivateRoute>
+                  <AdminPage />
+                </PrivateRoute>
+              } />
               <Route path="/garimpo" element={
                 <PrivateRoute>
                   <GarimpoOfertas />

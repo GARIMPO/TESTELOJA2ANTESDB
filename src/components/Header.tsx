@@ -265,141 +265,250 @@ const Header = () => {
   const headerLinks = settings?.headerLinks || defaultSettings.headerLinks;
 
   // Render desktop navigation links
-  const renderNavLinks = () => (
-    <nav className="hidden md:flex items-center space-x-6">
-      <Link to="/" className={getLinkStyle(settings)}>
-        Home
-      </Link>
-      {settings?.aboutUs?.enabled && (
-        <Link to="/about-us" className={getLinkStyle(settings)}>
-          Quem Somos
-        </Link>
-      )}
-      {headerLinks.novidades && (
-        <Link
-          to="/products/novidades"
-          className={getLinkStyle(settings)}
-        >
-          Novidades
-        </Link>
-      )}
-      {headerLinks.masculino && (
-        <Link
-          to="/products/masculino"
-          className={getLinkStyle(settings)}
-        >
-          Masculino
-        </Link>
-      )}
-      {headerLinks.feminino && (
-        <Link
-          to="/products/feminino"
-          className={getLinkStyle(settings)}
-        >
-          Feminino
-        </Link>
-      )}
-      {headerLinks.kids && (
-        <Link
-          to="/products/kids"
-          className={getLinkStyle(settings)}
-        >
-          Infantil
-        </Link>
-      )}
-      {headerLinks.calcados && (
-        <Link
-          to="/products/calcados"
-          className={getLinkStyle(settings)}
-        >
-          Calçados
-        </Link>
-      )}
-      {headerLinks.acessorios && (
-        <Link
-          to="/products/acessorios"
-          className={getLinkStyle(settings)}
-        >
-          Acessórios
-        </Link>
-      )}
-      {headerLinks.off && (
-        <Link
-          to="/products/off"
-          className={getLinkStyle(settings)}
-        >
-          Ofertas
-        </Link>
-      )}
-      {headerLinks.customLinks?.map((link, index) => 
-        link.enabled && (
+  const renderNavLinks = () => {
+    const linkStyle = getLinkStyle(settings);
+    return (
+      <div className="hidden md:flex space-x-4 items-center">
+        {settings?.aboutUs?.enabled && (
           <Link
-            key={`custom-${index}`}
-            to={`/products/${getNormalizedLink(link.label)}`}
-            className={getLinkStyle(settings)}
+            to="/about-us"
+            className={getLinkClass('/about-us')}
+            style={linkStyle}
           >
-            {link.label}
+            {settings?.aboutUs.title || 'Quem Somos'}
           </Link>
-        )
-      )}
-      <Link to="/admin" className="text-gray-600 hover:text-gray-900">
-        <Settings size={20} />
-      </Link>
-    </nav>
-  );
+        )}
+        {headerLinks.novidades && (
+          <Link
+            to="/products/novidades"
+            className={getLinkClass('/products/novidades')}
+            style={linkStyle}
+          >
+            Novidades
+          </Link>
+        )}
+        {headerLinks.masculino && (
+          <Link
+            to="/products/masculino"
+            className={getLinkClass('/products/masculino')}
+            style={linkStyle}
+          >
+            Masculino
+          </Link>
+        )}
+        {headerLinks.feminino && (
+          <Link
+            to="/products/feminino"
+            className={getLinkClass('/products/feminino')}
+            style={linkStyle}
+          >
+            Feminino
+          </Link>
+        )}
+        {headerLinks.kids && (
+          <Link
+            to="/products/kids"
+            className={getLinkClass('/products/kids')}
+            style={linkStyle}
+          >
+            Infantil
+          </Link>
+        )}
+        {headerLinks.calcados && (
+          <Link
+            to="/products/calcados"
+            className={getLinkClass('/products/calcados')}
+            style={linkStyle}
+          >
+            Calçados
+          </Link>
+        )}
+        {headerLinks.acessorios && (
+          <Link
+            to="/products/acessorios"
+            className={getLinkClass('/products/acessorios')}
+            style={linkStyle}
+          >
+            Acessórios
+          </Link>
+        )}
+        {headerLinks.off && (
+          <Link
+            to="/products/off"
+            className={getLinkClass('/products/off')}
+            style={linkStyle}
+          >
+            Ofertas
+          </Link>
+        )}
+        {headerLinks.customLinks?.map((link, index) => 
+          link.enabled && (
+            <Link
+              key={`custom-${index}`}
+              to={`/products/${getNormalizedLink(link.label)}`}
+              className={getLinkClass(`/products/${getNormalizedLink(link.label)}`)}
+              style={linkStyle}
+            >
+              {link.label}
+            </Link>
+          )
+        )}
+      </div>
+    );
+  };
 
   // Render mobile navigation links
   const renderMobileLinks = () => {
-    const links = [
-      { to: "/", text: "Home" },
-      ...(settings?.aboutUs?.enabled ? [{ to: "/about-us", text: "Quem Somos" }] : []),
-      ...(headerLinks.novidades ? [{ to: "/products/novidades", text: "Novidades" }] : []),
-      ...(headerLinks.masculino ? [{ to: "/products/masculino", text: "Masculino" }] : []),
-      ...(headerLinks.feminino ? [{ to: "/products/feminino", text: "Feminino" }] : []),
-      ...(headerLinks.kids ? [{ to: "/products/kids", text: "Infantil" }] : []),
-      ...(headerLinks.calcados ? [{ to: "/products/calcados", text: "Calçados" }] : []),
-      ...(headerLinks.acessorios ? [{ to: "/products/acessorios", text: "Acessórios" }] : []),
-      ...(headerLinks.off ? [{ to: "/products/off", text: "Ofertas" }] : []),
-      ...(headerLinks.customLinks?.filter(link => link.enabled).map((link) => ({
-        to: `/products/${getNormalizedLink(link.label)}`,
-        text: link.label,
-      })) || []),
-      { to: "/admin", text: "Painel Admin", icon: <Settings size={20} /> }
-    ];
-
+    const linkStyle = getLinkStyle(settings);
+    
     return (
-      <nav className="flex flex-col space-y-4">
-        {links.map((link, index) => (
-          <React.Fragment key={index}>
-            {link.to.startsWith("/") ? (
-              <Link
-                to={link.to}
-                className={getLinkStyle(settings)}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.icon ? (
-                  <div className="flex items-center gap-2">
-                    {link.icon}
-                    <span>{link.text}</span>
-                  </div>
-                ) : (
-                  link.text
-                )}
-              </Link>
-            ) : (
-              <a
-                href={link.to}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={getLinkStyle(settings)}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.text}
-              </a>
-            )}
-          </React.Fragment>
+      <div className="flex flex-col space-y-4 p-4">
+        {/* Links padrão */}
+        <Link
+          to="/"
+          className={getMobileLinkClass('/')}
+          onClick={() => setIsMenuOpen(false)}
+          style={linkStyle}
+        >
+          Home
+        </Link>
+        
+        {settings?.aboutUs?.enabled && (
+          <Link
+            to="/about-us"
+            className={getMobileLinkClass('/about-us')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            {settings?.aboutUs.title || 'Quem Somos'}
+          </Link>
+        )}
+        
+        {/* Links do cabeçalho - apenas os habilitados */}
+        {headerLinks.novidades && (
+          <Link
+            to="/products/novidades"
+            className={getMobileLinkClass('/products/novidades')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Novidades
+          </Link>
+        )}
+        {headerLinks.masculino && (
+          <Link
+            to="/products/masculino"
+            className={getMobileLinkClass('/products/masculino')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Masculino
+          </Link>
+        )}
+        {headerLinks.feminino && (
+          <Link
+            to="/products/feminino"
+            className={getMobileLinkClass('/products/feminino')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Feminino
+          </Link>
+        )}
+        {headerLinks.kids && (
+          <Link
+            to="/products/kids"
+            className={getMobileLinkClass('/products/kids')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Infantil
+          </Link>
+        )}
+        {headerLinks.calcados && (
+          <Link
+            to="/products/calcados"
+            className={getMobileLinkClass('/products/calcados')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Calçados
+          </Link>
+        )}
+        {headerLinks.acessorios && (
+          <Link
+            to="/products/acessorios"
+            className={getMobileLinkClass('/products/acessorios')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Acessórios
+          </Link>
+        )}
+        {headerLinks.off && (
+          <Link
+            to="/products/off"
+            className={getMobileLinkClass('/products/off')}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            Ofertas
+          </Link>
+        )}
+        
+        {/* Links personalizados - apenas os habilitados */}
+        {headerLinks.customLinks?.filter(link => link.enabled).map((link, index) => (
+          <Link
+            key={`mobile-custom-${index}`}
+            to={`/products/${getNormalizedLink(link.label)}`}
+            className={getMobileLinkClass(`/products/${getNormalizedLink(link.label)}`)}
+            onClick={() => setIsMenuOpen(false)}
+            style={linkStyle}
+          >
+            {link.label}
+          </Link>
         ))}
-      </nav>
+
+        {/* Admin Panel e Login - Sempre por último */}
+        {user ? (
+          <>
+            <div className="flex items-center text-blue-600 hover:text-blue-800 font-medium">
+              <Link
+                to="/admin"
+                className={`${getMobileLinkClass('/admin')} flex items-center`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Settings size={18} className="mr-2" />
+                Painel de Administração
+              </Link>
+            </div>
+            
+            <div className="flex items-center text-red-600 hover:text-red-800 font-medium">
+              <button
+                className="flex items-center w-full text-left"
+                onClick={() => {
+                  signOut();
+                  setIsMenuOpen(false);
+                }}
+              >
+                <LogOut size={18} className="mr-2" />
+                Sair
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center text-gray-700 hover:text-gray-900 font-medium">
+            <Link
+              to="/login"
+              className={`${getMobileLinkClass('/login')} flex items-center`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <User size={18} className="mr-2" />
+              Entrar / Login
+            </Link>
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -453,6 +562,34 @@ const Header = () => {
 
               {/* Desktop Account, Admin, and Cart */}
               <div className="hidden md:flex items-center space-x-2">
+                {user ? (
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      asChild
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      <Link to="/admin">
+                        <Settings size={20} />
+                      </Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={signOut}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <LogOut size={20} />
+                    </Button>
+                  </div>
+                ) : (
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to="/login">
+                      <User size={20} />
+                    </Link>
+                  </Button>
+                )}
                 <Link to="/cart" className="p-1 relative hover:text-shop-red" style={{ color: settings?.headerLinkColor || defaultSettings.headerLinkColor }}>
                   <ShoppingCart size={20} />
                   {cartItemCount > 0 && (

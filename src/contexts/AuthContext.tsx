@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { supabase } from '../lib/supabase';
 
 // Definir a interface do contexto de autenticação
 interface AuthContextType {
@@ -10,6 +11,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   isAdmin: boolean;
   userId: string | null;
+  login: (email: string, password: string) => Promise<{ user: any; error: any | null }>;
 }
 
 // Criar o contexto com um valor padrão
@@ -120,6 +122,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const login = async (email: string, password: string) => {
+    try {
+      const { data: { user }, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      setUser(user);
+      return { user, error: null };
+    } catch (error) {
+      return { user: null, error };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -128,7 +146,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         signIn,
         signOut,
         isAdmin,
-        userId
+        userId,
+        login
       }}
     >
       {children}

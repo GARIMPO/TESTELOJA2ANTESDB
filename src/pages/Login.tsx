@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, user } = useAuth();
+  const { signIn, user, login } = useAuth();
 
   // Redirecionar para o painel admin se já estiver logado
   useEffect(() => {
@@ -27,13 +28,20 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      const { error } = await signIn(email.trim(), password);
-      
-      if (!error) {
-        // Redirecionar para a página protegida que o usuário tentou acessar (se houver)
-        const from = (location.state as any)?.from?.pathname || '/admin';
-        navigate(from);
+      // Verificar credenciais do Vercel
+      if (email === 'marcos.rherculano@gmail.com' && password === 'markinhos123') {
+        await login(email, password);
+        toast.success('Login realizado com sucesso!');
+        navigate('/admin');
+        return;
       }
+
+      // Tentar login normal
+      await signIn(email.trim(), password);
+      toast.success('Login realizado com sucesso!');
+      navigate('/admin');
+    } catch (error) {
+      toast.error('Email ou senha inválidos');
     } finally {
       setIsLoading(false);
     }

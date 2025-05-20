@@ -85,6 +85,10 @@ const GarimpoOfertas = () => {
     toast.success('Card excluído com sucesso!');
   };
 
+  if (!user) {
+    return <div>Acesso negado</div>;
+  }
+
   return (
     <div className="container mx-auto p-4">
       <Card>
