@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider } from "./contexts/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ProductsPage from "./pages/ProductsPage";
@@ -38,16 +37,8 @@ const App = () => (
               <Route path="/about" element={<AboutUsPage />} />
               <Route path="/about-us" element={<AboutUsPage />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/admin" element={
-                <PrivateRoute>
-                  <AdminPage />
-                </PrivateRoute>
-              } />
-              <Route path="/garimpo" element={
-                <PrivateRoute>
-                  <GarimpoOfertas />
-                </PrivateRoute>
-              } />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/garimpo" element={<GarimpoOfertas />} />
               <Route path="/garimpo/:id" element={<GarimpoOfertaView />} />
               <Route path="/politica-de-privacidade" element={<PrivacyPolicyPage />} />
               <Route path="*" element={<NotFound />} />

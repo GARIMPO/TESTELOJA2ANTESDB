@@ -562,34 +562,16 @@ const Header = () => {
 
               {/* Desktop Account, Admin, and Cart */}
               <div className="hidden md:flex items-center space-x-2">
-                {user ? (
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      asChild
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      <Link to="/admin">
-                        <Settings size={20} />
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={signOut}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      <LogOut size={20} />
-                    </Button>
-                  </div>
-                ) : (
-                  <Button variant="ghost" size="icon" asChild>
-                    <Link to="/login">
-                      <User size={20} />
-                    </Link>
-                  </Button>
-                )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  <Link to="/admin">
+                    <Settings size={20} />
+                  </Link>
+                </Button>
                 <Link to="/cart" className="p-1 relative hover:text-shop-red" style={{ color: settings?.headerLinkColor || defaultSettings.headerLinkColor }}>
                   <ShoppingCart size={20} />
                   {cartItemCount > 0 && (
